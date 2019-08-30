@@ -19,8 +19,9 @@ public class GameMain {
 				-.5f, .5f, 0f, -.5f, -.5f, 0f, .5f, -.5f, 0f, 0.5f, 0.5f, 0
 		};
 		int[] indices = { 0, 1, 3, 3, 1, 2 };
+		float[] textureCoords = { 0, 0, 0, 1, 1, 1, 1, 0 };
 
-		BasicModel model = Loader.loadToVAO(vertices, indices);
+		BasicModel model = Loader.loadToVAO(vertices, indices, textureCoords);
 		ModelTexture texture = new ModelTexture(Loader.loadTexture("debian"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
 
