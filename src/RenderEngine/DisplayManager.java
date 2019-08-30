@@ -24,6 +24,7 @@ public class DisplayManager {
 
 		initializeGL(window);
 		glClearColor(0.1f, 0.4f, 0.1f, 0.0f);
+		glEnable(GL_DEPTH_TEST);
 		GL11.glViewport(0, 0, WIDTH, HEIGHT);
 
 		return window;

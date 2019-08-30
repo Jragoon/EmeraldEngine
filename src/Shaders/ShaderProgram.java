@@ -1,10 +1,13 @@
 package Shaders;
 
-import org.lwjgl.opengl.GL20;
+import org.joml.Matrix4f;
+import org.joml.Vector3f;
+import org.lwjgl.BufferUtils;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
+import java.nio.FloatBuffer;
 
 import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
@@ -14,15 +17,25 @@ public abstract class ShaderProgram {
 	private static int vertexShaderID;
 	private static int fragmentShaderID;
 
+	/* Allocating space for uniform 4x4 Matrices */
+	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
+
 	public ShaderProgram(String vertexFile, String fragmentFile) {
 		vertexShaderID = loadShader(vertexFile, GL_VERTEX_SHADER);
 		fragmentShaderID = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 		programID = glCreateProgram();
 		glAttachShader(programID, vertexShaderID);
 		glAttachShader(programID, fragmentShaderID);
+		bindAttributes();
 		glLinkProgram(programID);
 		glValidateProgram(programID);
-		bindAttributes();
+		getAllUniformLocations();
+	}
+
+	protected abstract void getAllUniformLocations();
+
+	protected int getUniformLocation(String uniformName) {
+		return glGetUniformLocation(programID, uniformName);
 	}
 
 	public void start() {
@@ -46,6 +59,27 @@ public abstract class ShaderProgram {
 		glBindAttribLocation(programID, attribute, variable);
 	}
 
+	protected void loadFloat(int location, float value) {
+		glUniform1f(location, value);
+	}
+
+	protected void loadVector(int location, Vector3f vector) {
+		glUniform3f(location, vector.x, vector.y, vector.z);
+	}
+
+	protected void loadBoolean(int location, boolean value) {
+		float toLoad = 0;
+		if (value)
+			toLoad = 1;
+		glUniform1f(location, toLoad);
+	}
+
+	protected void loadMatrix(int location, Matrix4f matrix) {
+		matrix.get(matrixBuffer);
+		matrixBuffer.flip();
+		glUniformMatrix4fv(location, false, matrixBuffer);
+	}
+
 	protected abstract void bindAttributes();
 
 	private int loadShader(String file, int type) {
@@ -65,8 +99,8 @@ public abstract class ShaderProgram {
 		int shaderID = glCreateShader(type);
 		glShaderSource(shaderID, shaderSource);
 		glCompileShader(shaderID);
-		if (glGetShaderi(shaderID, GL20.GL_COMPILE_STATUS) == GL_FALSE) {
-			System.out.println(GL20.glGetShaderInfoLog(shaderID, 500));
+		if (glGetShaderi(shaderID, GL_COMPILE_STATUS) == GL_FALSE) {
+			System.out.println(glGetShaderInfoLog(shaderID, 500));
 			System.err.println("Could not compile shader.");
 			System.exit(-1);
 		}

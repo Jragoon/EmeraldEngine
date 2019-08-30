@@ -1,11 +1,10 @@
 package RenderEngine;
 
 import Models.BasicModel;
+import de.matthiasmann.twl.utils.PNGDecoder;
 import org.lwjgl.BufferUtils;
-import org.newdawn.slick.opengl.PNGDecoder;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
@@ -36,7 +35,7 @@ public class Loader {
 		try {
 			PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/"+fileName+".png"));
 			ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
-			decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.RGBA);
+			decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
 			buffer.flip();
 			id = glGenTextures();
 			glBindTexture(GL_TEXTURE_2D, id);
