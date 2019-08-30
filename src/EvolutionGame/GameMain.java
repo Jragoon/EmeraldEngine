@@ -2,7 +2,7 @@ package EvolutionGame;
 
 import Models.BasicModel;
 import RenderEngine.*;
-import org.lwjgl.opengl.GL11;
+import Shaders.StaticShader;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
@@ -12,6 +12,7 @@ public class GameMain {
 		long display = DisplayManager.createDisplay();
 
 		Renderer renderer = new Renderer();
+		StaticShader shader = new StaticShader();
 		float[] vertices = {
 				-.5f, .5f, 0f, -.5f, -.5f, 0f, .5f, -.5f, 0f, 0.5f, 0.5f, 0
 		};
@@ -22,11 +23,13 @@ public class GameMain {
 		while (!glfwWindowShouldClose(display)) {
 			glfwPollEvents();
 			renderer.clear();
-			//render game world objects, terrains, etc.
+			shader.start();
 			renderer.render(model);
+			shader.stop();
 			DisplayManager.updateDisplay();
 		}
 
+		shader.clean();
 		Loader.clean();
 		DisplayManager.closeDisplay();
 	}
