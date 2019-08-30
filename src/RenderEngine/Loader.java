@@ -2,7 +2,12 @@ package RenderEngine;
 
 import Models.BasicModel;
 import org.lwjgl.BufferUtils;
+import org.newdawn.slick.opengl.PNGDecoder;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -17,6 +22,7 @@ public class Loader {
 
 	private static List<Integer> vaos = new ArrayList<>();
 	private static List<Integer> vbos = new ArrayList<>();
+	private static List<Integer> textures = new ArrayList<>();
 
 	public static BasicModel loadToVAO(float[] positions, int[] indices) {
 		int vaoID = createVAO();
@@ -24,6 +30,29 @@ public class Loader {
 		storeDataAsVBO(0, positions);
 		unbindVAO();
 		return new BasicModel(vaoID, indices.length);
+	}
+
+	public static int loadTexture(String fileName) {
+		int id = 0;
+		try {
+			PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/"+fileName+".png"));
+			ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
+			decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.RGBA);
+			buffer.flip();
+			id = glGenTextures();
+			glBindTexture(GL_TEXTURE_2D, id);
+			glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+			glTexParameterf(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, decoder.getWidth(), decoder.getHeight(),
+					0, GL_RGBA, GL_UNSIGNED_BYTE, buffer);
+			glGenerateMipmap(GL_TEXTURE_2D);
+		}
+		catch (IOException e) {
+			System.out.println(e.getMessage());
+		}
+		textures.add(id);
+		return id;
 	}
 
 	private static int createVAO() {
@@ -84,5 +113,6 @@ public class Loader {
 	public static void clean() {
 		for (Integer vao : vaos) glDeleteVertexArrays(vao);
 		for (Integer vbo : vbos) glDeleteBuffers(vbo);
+		for (Integer texture : textures) glDeleteTextures(texture);
 	}
 }

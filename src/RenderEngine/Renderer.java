@@ -1,6 +1,7 @@
 package RenderEngine;
 
 import Models.BasicModel;
+import Models.TexturedModel;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.glDisableVertexAttribArray;
@@ -12,7 +13,8 @@ public class Renderer {
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 
-	public void render(BasicModel model) {
+	public void render(TexturedModel texturedModel) {
+		BasicModel model = texturedModel.getModel();
 		glBindVertexArray(model.getVaoID());
 		glEnableVertexAttribArray(0);
 		glDrawElements(GL_TRIANGLES, model.getVertices(), GL_UNSIGNED_INT, 0);
