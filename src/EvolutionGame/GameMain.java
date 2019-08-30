@@ -1,10 +1,12 @@
 package EvolutionGame;
 
+import Entities.Entity;
 import Models.BasicModel;
 import Models.TexturedModel;
 import RenderEngine.*;
 import Shaders.StaticShader;
 import Textures.ModelTexture;
+import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.glfwPollEvents;
 import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
@@ -24,12 +26,13 @@ public class GameMain {
 		BasicModel model = Loader.loadToVAO(vertices, indices, textureCoords);
 		ModelTexture texture = new ModelTexture(Loader.loadTexture("debian"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
+		Entity entity = new Entity(texturedModel, new Vector3f(-1, 0, 0), 0, 0, 0, 1);
 
 		while (!glfwWindowShouldClose(display)) {
 			glfwPollEvents();
 			renderer.clear();
 			shader.start();
-			renderer.render(texturedModel);
+			renderer.render(entity, shader);
 			shader.stop();
 			DisplayManager.updateDisplay();
 		}

@@ -76,7 +76,6 @@ public abstract class ShaderProgram {
 
 	protected void loadMatrix(int location, Matrix4f matrix) {
 		matrix.get(matrixBuffer);
-		matrixBuffer.flip();
 		glUniformMatrix4fv(location, false, matrixBuffer);
 	}
 
