@@ -11,6 +11,7 @@ public class GameMain {
 
         while (!glfwWindowShouldClose(display)) {
             glfwPollEvents();
+            DisplayManager.clearDisplay();
             //render game world objects, terrains, etc.
             //renderer.render()
             DisplayManager.updateDisplay();
