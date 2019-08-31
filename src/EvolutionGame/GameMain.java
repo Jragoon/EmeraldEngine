@@ -2,6 +2,7 @@ package EvolutionGame;
 
 import Entities.Camera;
 import Entities.Entity;
+import Entities.Light;
 import Models.BasicModel;
 import Models.TexturedModel;
 import RenderEngine.*;
@@ -21,10 +22,13 @@ public class GameMain {
 		Renderer renderer = new Renderer(shader);
 
 
-		BasicModel model = OBJLoader.loadModel("stall");
+		BasicModel model = OBJLoader.loadModel("dragon");
 		ModelTexture texture = new ModelTexture(Loader.loadTexture("stall"));
+		texture.setShineDamper(10);
+		texture.setReflectivity(1);
 		TexturedModel texturedModel = new TexturedModel(model, texture);
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -20), 0, 0, 0, 1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, -5, -20), 0, 0, 0, 1);
+		Light light = new Light(new Vector3f(0, 0, -12), new Vector3f(1, 1, 1));
 
 		while (!glfwWindowShouldClose(display)) {
 			entity.increasePosition(0f, 0, 0f);
@@ -33,6 +37,7 @@ public class GameMain {
 			camera.move();
 			renderer.clear();
 			shader.start();
+			shader.loadLight(light);
 			shader.loadViewMatrix(camera);
 			renderer.render(entity, shader);
 			shader.stop();
