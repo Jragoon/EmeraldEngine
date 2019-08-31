@@ -19,16 +19,12 @@ public class GameMain {
 		Camera camera = new Camera();
 		StaticShader shader = new StaticShader();
 		Renderer renderer = new Renderer(shader);
-		float[] vertices = {
-				-.5f, .5f, 0f, -.5f, -.5f, 0f, .5f, -.5f, 0f, 0.5f, 0.5f, 0
-		};
-		int[] indices = { 0, 1, 3, 3, 1, 2 };
-		float[] textureCoords = { 0, 0, 0, 1, 1, 1, 1, 0 };
 
-		BasicModel model = Loader.loadToVAO(vertices, indices, textureCoords);
-		ModelTexture texture = new ModelTexture(Loader.loadTexture("debian"));
+
+		BasicModel model = OBJLoader.loadModel("stall");
+		ModelTexture texture = new ModelTexture(Loader.loadTexture("stall"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
-		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -1), 0, 0, 0, 1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, -20), 0, 0, 0, 1);
 
 		while (!glfwWindowShouldClose(display)) {
 			entity.increasePosition(0f, 0, 0f);
