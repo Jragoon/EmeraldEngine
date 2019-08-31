@@ -9,10 +9,10 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class DisplayManager {
-	public static final int WIDTH = 1280;
-	public static final int HEIGHT = 720;
+	static final int WIDTH = 1280;
+	static final int HEIGHT = 720;
 	private static final String TITLE = "Emerald Engine";
-	private static long window;
+	public static long window;
 
 	public static long createDisplay() {
 		if (!glfwInit())
@@ -44,5 +44,9 @@ public class DisplayManager {
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		glfwSwapInterval(1);
+	}
+
+	public static boolean keyIsPressed(int key) {
+		return glfwGetKey(window, key) == 1;
 	}
 }
