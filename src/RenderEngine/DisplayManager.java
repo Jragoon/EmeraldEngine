@@ -9,8 +9,8 @@ import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.system.MemoryUtil.NULL;
 
 public class DisplayManager {
-	private static final int WIDTH = 1280;
-	private static final int HEIGHT = 720;
+	public static final int WIDTH = 1280;
+	public static final int HEIGHT = 720;
 	private static final String TITLE = "Emerald Engine";
 	private static long window;
 

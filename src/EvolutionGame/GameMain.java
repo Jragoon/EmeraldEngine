@@ -15,8 +15,8 @@ public class GameMain {
 	public static void main(String[] args) {
 		long display = DisplayManager.createDisplay();
 
-		Renderer renderer = new Renderer();
 		StaticShader shader = new StaticShader();
+		Renderer renderer = new Renderer(shader);
 		float[] vertices = {
 				-.5f, .5f, 0f, -.5f, -.5f, 0f, .5f, -.5f, 0f, 0.5f, 0.5f, 0
 		};
@@ -26,9 +26,11 @@ public class GameMain {
 		BasicModel model = Loader.loadToVAO(vertices, indices, textureCoords);
 		ModelTexture texture = new ModelTexture(Loader.loadTexture("debian"));
 		TexturedModel texturedModel = new TexturedModel(model, texture);
-		Entity entity = new Entity(texturedModel, new Vector3f(-1, 0, 0), 0, 0, 0, 1);
+		Entity entity = new Entity(texturedModel, new Vector3f(0, 0, 0), 0, 0, 0, 1);
 
 		while (!glfwWindowShouldClose(display)) {
+			entity.increasePosition(0f, 0, -.01f);
+			entity.increaseRotation(0f, 1f, 1f);
 			glfwPollEvents();
 			renderer.clear();
 			shader.start();
