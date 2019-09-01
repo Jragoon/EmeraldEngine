@@ -5,7 +5,7 @@ import Entities.Light;
 import Tools.MathLibrary;
 import org.joml.Matrix4f;
 
-public class StaticShader extends ShaderProgram {
+public class EntityShader extends ShaderProgram {
 	private static final String VERTEX_SHADER = "src/Shaders/VertexShader.glsl";
 	private static final String FRAGMENT_SHADER = "src/Shaders/FragmentShader.glsl";
 
@@ -17,7 +17,7 @@ public class StaticShader extends ShaderProgram {
 	private int location_shineDamper;
 	private int location_reflectivity;
 
-	public StaticShader() {
+	public EntityShader() {
 		super(VERTEX_SHADER, FRAGMENT_SHADER);
 	}
 

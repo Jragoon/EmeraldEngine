@@ -1,5 +1,7 @@
 package Shaders;
 
+import Entities.Camera;
+import Entities.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -33,6 +35,10 @@ public abstract class ShaderProgram {
 	}
 
 	protected abstract void getAllUniformLocations();
+
+	public abstract void loadLight(Light light);
+
+	public abstract void loadViewMatrix(Camera camera);
 
 	protected int getUniformLocation(String uniformName) {
 		return glGetUniformLocation(programID, uniformName);

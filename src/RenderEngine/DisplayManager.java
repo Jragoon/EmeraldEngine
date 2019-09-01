@@ -24,6 +24,8 @@ public class DisplayManager {
 
 		initializeGL(window);
 		glClearColor(0.1f, 0.4f, 0.1f, 0.0f);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
 		GL11.glViewport(0, 0, WIDTH, HEIGHT);
 
@@ -31,6 +33,7 @@ public class DisplayManager {
 	}
 
 	public static void updateDisplay() {
+		glfwPollEvents();
 		glfwSwapBuffers(window);
 	}
 
