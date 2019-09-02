@@ -12,7 +12,10 @@ public class DisplayManager {
 	static final int WIDTH = 1280;
 	static final int HEIGHT = 720;
 	private static final String TITLE = "Emerald Engine";
-	public static long window;
+	private static long window;
+
+	private static long lastFrameTime;
+	private static float delta = 0;
 
 	public static long createDisplay() {
 		if (!glfwInit())
@@ -23,11 +26,12 @@ public class DisplayManager {
 			throw new RuntimeException("Failed to create GLFW window.");
 
 		initializeGL(window);
-		glClearColor(0.10f, 0.10f, .2f, 0.0f);
+		glClearColor(0.70f, 0.80f, 1.0f, 0.0f);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);
 		GL11.glViewport(0, 0, WIDTH, HEIGHT);
+		lastFrameTime = getCurrentTime();
 
 		return window;
 	}
@@ -35,6 +39,9 @@ public class DisplayManager {
 	public static void updateDisplay() {
 		glfwPollEvents();
 		glfwSwapBuffers(window);
+		long currentFrameTime = getCurrentTime();
+		delta = (currentFrameTime - lastFrameTime);
+		lastFrameTime = currentFrameTime;
 	}
 
 	public static void closeDisplay() {
@@ -43,10 +50,18 @@ public class DisplayManager {
 		glfwTerminate();
 	}
 
+	public static float getFrameTimeMillis() {
+		return delta;
+	}
+
 	private static void initializeGL(long window) {
 		glfwMakeContextCurrent(window);
 		GL.createCapabilities();
 		glfwSwapInterval(1);
+	}
+
+	private static long getCurrentTime() {
+		return System.currentTimeMillis();
 	}
 
 	public static boolean keyIsPressed(int key) {
