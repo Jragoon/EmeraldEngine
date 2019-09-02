@@ -23,7 +23,7 @@ public class DisplayManager {
 			throw new RuntimeException("Failed to create GLFW window.");
 
 		initializeGL(window);
-		glClearColor(0.75f, 0.45f, .45f, 0.0f);
+		glClearColor(0.10f, 0.10f, .2f, 0.0f);
 		glEnable(GL_CULL_FACE);
 		glCullFace(GL_BACK);
 		glEnable(GL_DEPTH_TEST);

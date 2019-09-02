@@ -28,6 +28,18 @@ public class EntityRenderer {
 		shader.stop();
 	}
 
+	public void render(Map<TexturedModel, List<Entity>> entities) {
+		for (TexturedModel model : entities.keySet()) {
+			prepareTexturedModel(model);
+			List<Entity> batch = entities.get(model);
+			for (Entity entity : batch) {
+				prepareInstance(entity);
+				glDrawElements(GL_TRIANGLES, model.getModel().getVertices(), GL_UNSIGNED_INT, 0);
+			}
+			unbindTexturedModel();
+		}
+	}
+
 	private void prepareTexturedModel(TexturedModel model) {
 		BasicModel basicModel = model.getModel();
 		glBindVertexArray(basicModel.getVaoID());
@@ -52,17 +64,5 @@ public class EntityRenderer {
 				entity.getPosition(), entity.getRotationX(), entity.getRotationY(), entity.getRotationZ(), entity.getScale()
 		);
 		shader.loadTransformationMatrix(transformationMatrix);
-	}
-
-	public void render(Map<TexturedModel, List<Entity>> entities) {
-		for (TexturedModel model : entities.keySet()) {
-			prepareTexturedModel(model);
-			List<Entity> batch = entities.get(model);
-			for (Entity entity : batch) {
-				prepareInstance(entity);
-				glDrawElements(GL_TRIANGLES, model.getModel().getVertices(), GL_UNSIGNED_INT, 0);
-			}
-			unbindTexturedModel();
-		}
 	}
 }

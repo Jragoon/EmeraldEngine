@@ -21,7 +21,7 @@ import static org.lwjgl.opengl.GL11.*;
 public class MasterRenderer {
 	private static final float FOV = 70f;
 	private static final float NEAR_PLANE = 0.1f;
-	private static final float FAR_PLANE = 1000f;
+	private static final float FAR_PLANE = 10000f;
 
 	private Matrix4f projectionMatrix;
 	private EntityShader entityShader = new EntityShader();
