@@ -1,8 +1,6 @@
 package RenderEngine;
 
-import Entities.Entity;
 import Models.BasicModel;
-import Models.TexturedModel;
 import Shaders.TerrainShader;
 import Terrains.Terrain;
 import Textures.ModelTexture;
