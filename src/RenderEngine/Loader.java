@@ -34,7 +34,7 @@ public class Loader {
 	public static int loadTexture(String fileName) {
 		int id = 0;
 		try {
-			PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/"+fileName+".png"));
+			PNGDecoder decoder = new PNGDecoder(new FileInputStream("res/textures/"+fileName+".png"));
 			ByteBuffer buffer = ByteBuffer.allocateDirect(4 * decoder.getWidth() * decoder.getHeight());
 			decoder.decode(buffer, decoder.getWidth() * 4, PNGDecoder.Format.RGBA);
 			buffer.flip();

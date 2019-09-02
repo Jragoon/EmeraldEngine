@@ -17,7 +17,7 @@ void main(void) {
     vec3 unitLight = normalize(toLightVector);
 
     float brightness = dot(unitNormal, unitLight);
-    brightness = max(brightness, 0.0);
+    brightness = max(brightness, 0.1);
 
     vec3 diffusedLight = brightness * lightColor;
 

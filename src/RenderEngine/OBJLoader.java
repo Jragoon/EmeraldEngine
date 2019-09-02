@@ -3,7 +3,6 @@ package RenderEngine;
 import Models.BasicModel;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
-import org.lwjgl.system.CallbackI;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -16,7 +15,7 @@ public class OBJLoader {
 	public static BasicModel loadModel(String fileName) {
 		FileReader reader = null;
 		try {
-			reader = new FileReader(new File("res/"+fileName+".obj"));
+			reader = new FileReader(new File("res/obj/"+fileName+".obj"));
 		}
 		catch (FileNotFoundException e) {
 			System.out.println(e.getMessage());

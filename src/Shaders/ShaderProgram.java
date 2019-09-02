@@ -1,5 +1,7 @@
 package Shaders;
 
+import Entities.Camera;
+import Entities.Light;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
@@ -13,14 +15,14 @@ import static org.lwjgl.opengl.GL11.GL_FALSE;
 import static org.lwjgl.opengl.GL20.*;
 
 public abstract class ShaderProgram {
-	private static int programID;
-	private static int vertexShaderID;
-	private static int fragmentShaderID;
+	private int programID;
+	private int vertexShaderID;
+	private int fragmentShaderID;
 
 	/* Allocating space for uniform 4x4 Matrices */
 	private static FloatBuffer matrixBuffer = BufferUtils.createFloatBuffer(16);
 
-	public ShaderProgram(String vertexFile, String fragmentFile) {
+	ShaderProgram(String vertexFile, String fragmentFile) {
 		vertexShaderID = loadShader(vertexFile, GL_VERTEX_SHADER);
 		fragmentShaderID = loadShader(fragmentFile, GL_FRAGMENT_SHADER);
 		programID = glCreateProgram();
@@ -34,7 +36,11 @@ public abstract class ShaderProgram {
 
 	protected abstract void getAllUniformLocations();
 
-	protected int getUniformLocation(String uniformName) {
+	public abstract void loadLight(Light light);
+
+	public abstract void loadViewMatrix(Camera camera);
+
+	int getUniformLocation(String uniformName) {
 		return glGetUniformLocation(programID, uniformName);
 	}
 
@@ -55,26 +61,26 @@ public abstract class ShaderProgram {
 		glDeleteProgram(programID);
 	}
 
-	protected void bindAttribute(int attribute, String variable) {
+	void bindAttribute(int attribute, String variable) {
 		glBindAttribLocation(programID, attribute, variable);
 	}
 
-	protected void loadFloat(int location, float value) {
+	void loadFloat(int location, float value) {
 		glUniform1f(location, value);
 	}
 
-	protected void loadVector(int location, Vector3f vector) {
+	void loadVector(int location, Vector3f vector) {
 		glUniform3f(location, vector.x, vector.y, vector.z);
 	}
 
-	protected void loadBoolean(int location, boolean value) {
+	void loadBoolean(int location, boolean value) {
 		float toLoad = 0;
 		if (value)
 			toLoad = 1;
 		glUniform1f(location, toLoad);
 	}
 
-	protected void loadMatrix(int location, Matrix4f matrix) {
+	void loadMatrix(int location, Matrix4f matrix) {
 		matrix.get(matrixBuffer);
 		glUniformMatrix4fv(location, false, matrixBuffer);
 	}

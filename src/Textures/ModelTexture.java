@@ -9,6 +9,12 @@ public class ModelTexture {
 		this.textureID = id;
 	}
 
+	public ModelTexture(int id, float shineDamper, float reflectivity) {
+		this.textureID = id;
+		this.shineDamper = shineDamper;
+		this.reflectivity = reflectivity;
+	}
+
 	public int getTextureID() {
 		return this.textureID;
 	}

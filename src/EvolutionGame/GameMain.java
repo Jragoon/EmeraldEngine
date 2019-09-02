@@ -6,45 +6,48 @@ import Entities.Light;
 import Models.BasicModel;
 import Models.TexturedModel;
 import RenderEngine.*;
-import Shaders.StaticShader;
+import Terrains.Terrain;
 import Textures.ModelTexture;
 import org.joml.Vector3f;
 
-import static org.lwjgl.glfw.GLFW.glfwPollEvents;
-import static org.lwjgl.glfw.GLFW.glfwWindowShouldClose;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
+import static org.lwjgl.glfw.GLFW.*;
 
 public class GameMain {
 	public static void main(String[] args) {
 		long display = DisplayManager.createDisplay();
 
 		Camera camera = new Camera();
-		StaticShader shader = new StaticShader();
-		Renderer renderer = new Renderer(shader);
+		Light light = new Light(new Vector3f(0, 10000, 0), new Vector3f(1, 1, 1));
 
+		List<Terrain> terrains = new ArrayList<>();
+		terrains.add(new Terrain(0, 0, new ModelTexture(Loader.loadTexture("dirtSnow"))));
+		terrains.add(new Terrain(-1, -1, new ModelTexture(Loader.loadTexture("dirtSnow"))));
+		terrains.add(new Terrain(-1, 0, new ModelTexture(Loader.loadTexture("dirtSnow"))));
+		terrains.add(new Terrain(0, -1, new ModelTexture(Loader.loadTexture("dirtSnow"))));
+		ModelTexture snowTexture = new ModelTexture(Loader.loadTexture("Pine"), 1, 1);
+		TexturedModel snowyTree = new TexturedModel(OBJLoader.loadModel("PineTree1Snowy"), snowTexture);
+		List<Entity> entities = new ArrayList<>();
+		Random r = new Random();
+		for (int i = 0; i < 10000; i++) {
+			float x = r.nextFloat() * 1600 - 900;
+			float z = r.nextFloat() * 1600 - 900;
+			entities.add(new Entity(snowyTree, new Vector3f(x, 0, z), 0,
+					r.nextFloat() * 180f, 0f, r.nextFloat()*5));
+		}
 
-		BasicModel model = OBJLoader.loadModel("dragon");
-		ModelTexture texture = new ModelTexture(Loader.loadTexture("stall"));
-		texture.setShineDamper(10);
-		texture.setReflectivity(1);
-		TexturedModel texturedModel = new TexturedModel(model, texture);
-		Entity entity = new Entity(texturedModel, new Vector3f(0, -5, -20), 0, 0, 0, 1);
-		Light light = new Light(new Vector3f(0, 0, -12), new Vector3f(1, 1, 1));
-
+		MasterRenderer renderer = new MasterRenderer();
 		while (!glfwWindowShouldClose(display)) {
-			entity.increasePosition(0f, 0, 0f);
-			entity.increaseRotation(0f, 1f, 1f);
-			glfwPollEvents();
-			camera.move();
-			renderer.clear();
-			shader.start();
-			shader.loadLight(light);
-			shader.loadViewMatrix(camera);
-			renderer.render(entity, shader);
-			shader.stop();
+			for (Entity entity : entities) renderer.addEntity(entity);
+			for (Terrain terrain : terrains) renderer.addTerrain(terrain);
+			renderer.render(light, camera);
 			DisplayManager.updateDisplay();
 		}
 
-		shader.clean();
+		renderer.clean();
 		Loader.clean();
 		DisplayManager.closeDisplay();
 	}
