@@ -4,9 +4,19 @@ import Entities.Camera;
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
+
 import java.lang.Math;
 
 public class MathLibrary {
+
+	public static Matrix4f createTransformationMatrix(Vector2f translation, Vector2f scale) {
+		Matrix4f matrix = new Matrix4f().identity();
+		Vector3f adjustedTranslation = new Vector3f(translation.x, translation.y, 0f);
+		matrix.translate(adjustedTranslation);
+		matrix.scale(new Vector3f(scale.x, scale.y, 1f));
+		return matrix;
+	}
+
 	public static float barryCentric(Vector3f p1, Vector3f p2, Vector3f p3, Vector2f pos) {
 		float det = (p2.z - p3.z) * (p1.x - p3.x) + (p3.x - p2.x) * (p1.z - p3.z);
 		float l1 = ((p2.z - p3.z) * (pos.x - p3.x) + (p3.x - p2.x) * (pos.y - p3.z)) / det;

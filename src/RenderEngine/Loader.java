@@ -31,6 +31,13 @@ public class Loader {
 		return new BasicModel(vaoID, indices.length);
 	}
 
+	public static BasicModel loadToVAO(float[] positions) {
+		int vaoID = createVAO();
+		storeDataAsVBO(0, 2, positions);
+		unbindVAO();
+		return new BasicModel(vaoID, positions.length / 2);
+	}
+
 	public static int loadTexture(String fileName) {
 		int id = 0;
 		try {
