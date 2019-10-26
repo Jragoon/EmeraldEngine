@@ -20,7 +20,6 @@ public class GameMain {
 	public static void main(String[] args) {
 		long display = DisplayManager.createDisplay();
 
-		Camera camera = new Camera();
 		Light light = new Light(new Vector3f(10000, 10000, 0), new Vector3f(1, 1, 1));
 
 		List<Terrain> terrains = new ArrayList<>();
@@ -39,11 +38,13 @@ public class GameMain {
 			entities.add(new Entity(snowyTree, new Vector3f(x, 0, z), 0,
 					r.nextFloat() * 180f, 0f, r.nextFloat()*5));
 		}
-		Player player = new Player(dragon, new Vector3f(0, 0, -120), 0, 0, 0, 7);
+		Player player = new Player(dragon, new Vector3f(0, 0, -120), 0, 0, 0, 2);
+		Camera camera = new Camera(player);
 
 		MasterRenderer renderer = new MasterRenderer();
 		while (!glfwWindowShouldClose(display)) {
 			player.move();
+			camera.move();
 			renderer.addEntity(player);
 			for (Entity entity : entities) renderer.addEntity(entity);
 			for (Terrain terrain : terrains) renderer.addTerrain(terrain);
