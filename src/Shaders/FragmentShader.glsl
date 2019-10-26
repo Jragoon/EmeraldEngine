@@ -9,6 +9,7 @@ out vec4 out_color;
 
 uniform sampler2D textureSampler;
 uniform vec3 lightColor[7];
+uniform vec3 attenuation[7];
 uniform float shineDamper; /* Visibility range of specular light */
 uniform float reflectivity;
 
@@ -20,6 +21,8 @@ void main(void) {
     vec3 totalSpecular = vec3(0.0);
 
     for (int i = 0; i < 7; i++) {
+        float distance = length(toLightVector[i]);
+        float attenuationFactor = attenuation[i].x + (attenuation[i].y * distance) + (attenuation[i].z * distance * distance);
         vec3 unitLight = normalize(toLightVector[i]);
 
         float brightness = dot(unitNormal, unitLight);
@@ -31,8 +34,8 @@ void main(void) {
         float specularLightAmount = dot(reflectedLight, unitCamera);
         specularLightAmount = max(specularLightAmount, 0.0);
         float dampedFactor = pow(specularLightAmount, shineDamper);
-        totalDiffuse = totalDiffuse + brightness * lightColor[i];
-        totalSpecular = totalSpecular + dampedFactor * reflectivity * lightColor[i];
+        totalDiffuse = totalDiffuse + (brightness * lightColor[i]) / attenuationFactor;
+        totalSpecular = totalSpecular + (dampedFactor * reflectivity * lightColor[i]) / attenuationFactor;
     }
     totalDiffuse = max(totalDiffuse, 0.2);
 
