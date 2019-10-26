@@ -22,8 +22,7 @@ public class Camera {
 
 	public void move() {
 		calculateZoom();
-		calculatePitch();
-		calculateAngleAroundPlayer();
+		calculatePitchAndAngle();
 		float horizontalDistance = calcHorizontalDistance();
 		float verticalDistance = calcVerticalDistance();
 		calculateCameraPosition(horizontalDistance, verticalDistance);
@@ -70,15 +69,10 @@ public class Camera {
 		distanceFromPlayer -= DisplayManager.mouseWheelVelocity * 75f;
 	}
 
-	private void calculatePitch() {
+	private void calculatePitchAndAngle() {
 		if (DisplayManager.rightClick) {
 			float pitchChange = mouseDY() * 0.1f;
 			pitch -= pitchChange;
-		}
-	}
-
-	private void calculateAngleAroundPlayer() {
-		if (DisplayManager.leftClick) {
 			float angleChange = mouseDX();
 			angleAroundPlayer -= angleChange * 0.1f;
 		}
