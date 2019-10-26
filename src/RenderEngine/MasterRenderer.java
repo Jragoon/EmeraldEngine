@@ -37,21 +37,21 @@ public class MasterRenderer {
 		this.terrainRenderer = new TerrainRenderer(terrainShader, projectionMatrix);
 	}
 
-	public void render(Light sun, Camera camera) {
+	public void render(List<Light> lights, Camera camera) {
 		clear();
 		camera.move();
-		startShader(entityShader, sun, camera);
+		startShader(entityShader, lights, camera);
 		entityRenderer.render(entities);
 		stopShader(entityShader);
-		startShader(terrainShader, sun, camera);
+		startShader(terrainShader, lights, camera);
 		terrainRenderer.render(terrains);
 		stopShader(terrainShader);
 		clearGameObjects();
 	}
 
-	private void startShader(ShaderProgram shader, Light light, Camera camera) {
+	private void startShader(ShaderProgram shader, List<Light> lights, Camera camera) {
 		shader.start();
-		shader.loadLight(light);
+		shader.loadLights(lights);
 		shader.loadViewMatrix(camera);
 	}
 

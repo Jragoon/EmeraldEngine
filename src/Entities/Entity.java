@@ -6,7 +6,7 @@ import org.joml.Vector3f;
 /* Instance of a textured model that we give to the renderer */
 public class Entity {
 	private TexturedModel model;
-	private Vector3f position;
+	protected Vector3f position;
 	private float rotationX, rotationY, rotationZ;
 	private float scale;
 
